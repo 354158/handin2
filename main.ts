@@ -1,5 +1,8 @@
 namespace SpriteKind {
     export const skattekiste = SpriteKind.create()
+    export const opgave1 = SpriteKind.create()
+    export const opgave2 = SpriteKind.create()
+    export const opgave3 = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -60,6 +63,17 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     false
     )
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.opgave3, function (sprite, otherSprite) {
+    game.showLongText("Nu venter tredje opgave! løs gåden og kom tættere på udgangen.", DialogLayout.Bottom)
+    game.showLongText("Her er gåden", DialogLayout.Bottom)
+    if (game.askForNumber("Hvor mange fingre er der på en hånd", 1) == 5) {
+        game.showLongText("Godt klaret, find nøglen og lås kisten op med tallene fra de tre gåder", DialogLayout.Bottom)
+    } else {
+        game.showLongText("Forkert, start forfra", DialogLayout.Bottom)
+        game.reset()
+    }
+    otherSprite.setKind(SpriteKind.Player)
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     Frynsevinge,
@@ -118,6 +132,28 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     500,
     false
     )
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.opgave1, function (sprite, otherSprite) {
+    game.showLongText("Nu venter første opgave! løs gåden og kom tættere på udgangen.", DialogLayout.Bottom)
+    game.showLongText("Her er gåden", DialogLayout.Bottom)
+    if (game.askForNumber("hvilket semester er vi i gang med", 1) == 1) {
+        game.showLongText("Godt klaret, find hjertet.", DialogLayout.Bottom)
+    } else {
+        game.showLongText("Forkert, start forfra", DialogLayout.Bottom)
+        game.reset()
+    }
+    otherSprite.setKind(SpriteKind.Player)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.opgave2, function (sprite, otherSprite) {
+    game.showLongText("Nu venter anden opgave! løs gåden og kom tættere på udgangen.", DialogLayout.Bottom)
+    game.showLongText("Her er gåden", DialogLayout.Bottom)
+    if (game.askForNumber("Hvor mange liv har en kat", 1) == 9) {
+        game.showLongText("Godt klaret, find guldfisken.", DialogLayout.Bottom)
+    } else {
+        game.showLongText("Forkert, start forfra", DialogLayout.Bottom)
+        game.reset()
+    }
+    otherSprite.setKind(SpriteKind.Player)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -239,13 +275,18 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.skattekiste, function (sprite, otherSprite) {
     game.showLongText("indtast kode", DialogLayout.Bottom)
-    if (game.askForNumber("", 4) == 9187) {
+    if (game.askForNumber("", 3) == 195) {
         game.gameOver(true)
         game.setGameOverEffect(true, effects.confetti)
+    } else {
+        game.setGameOverMessage(false, "GAME OVER!")
+        game.gameOver(false)
+        game.reset()
     }
 })
 let Frynsevinge: Sprite = null
-let kode = 1234
+game.showLongText("Velkommen til skattejagt.", DialogLayout.Bottom)
+game.showLongText("Du får ved hvert object et svar du skal huske på. Gå til ildkuglen.", DialogLayout.Bottom)
 Frynsevinge = sprites.create(img`
     . f f f . f f f f . f f f . 
     f f f f f c c c c f f f f f 
@@ -303,3 +344,60 @@ tiles.setCurrentTilemap(tilemap`level2`)
 scene.cameraFollowSprite(Frynsevinge)
 tiles.placeOnTile(Frynsevinge, tiles.getTileLocation(15, 0))
 tiles.placeOnTile(skat, tiles.getTileLocation(12, 11))
+let gåder = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . 4 4 4 4 4 . . . . . . 
+    . . . 4 4 4 5 5 5 d 4 4 4 4 . . 
+    . . 4 d 5 d 5 5 5 d d d 4 4 . . 
+    . . 4 5 5 1 1 1 d d 5 5 5 4 . . 
+    . 4 5 5 5 1 1 1 5 1 1 5 5 4 4 . 
+    . 4 d d 1 1 5 5 5 1 1 5 5 d 4 . 
+    . 4 5 5 1 1 5 1 1 5 5 d d d 4 . 
+    . 2 5 5 5 d 1 1 1 5 1 1 5 5 2 . 
+    . 2 d 5 5 d 1 1 1 5 1 1 5 5 2 . 
+    . . 2 4 d d 5 5 5 5 d d 5 4 . . 
+    . . . 2 2 4 d 5 5 d d 4 4 . . . 
+    . . 2 2 2 2 2 4 4 4 2 2 2 . . . 
+    . . . 2 2 4 4 4 4 4 4 2 2 . . . 
+    . . . . . 2 2 2 2 2 2 . . . . . 
+    `, SpriteKind.opgave1)
+tiles.placeOnTile(gåder, tiles.getTileLocation(12, 1))
+let gåder2 = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . f f f f f f . f f f f f f . 
+    . f f 3 3 3 3 f f f 3 3 3 3 f f 
+    . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+    . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+    . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+    . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+    . f 3 3 3 3 b b b b b 3 3 3 3 f 
+    . f f 3 3 b b b b b b b 3 3 f f 
+    . . f f 3 b b b b b b b 3 f f . 
+    . . . f f b b b b b b b f f . . 
+    . . . . f f b b b b b f f . . . 
+    . . . . . f f b b b f f . . . . 
+    . . . . . . f f b f f . . . . . 
+    . . . . . . . f f f . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.opgave2)
+tiles.placeOnTile(gåder2, tiles.getTileLocation(3, 7))
+let gåder3 = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . c c c c c . . . . 
+    . . . . . . c d d d d d c . . . 
+    . . . . . . c c c c c d c . . . 
+    . . . . . c 4 4 4 4 d c c . . . 
+    . . . . c d 4 4 4 4 4 1 c . . . 
+    . . . c 4 4 1 4 4 4 4 4 1 c . . 
+    . . c 4 4 4 4 1 4 4 4 4 1 c c c 
+    . c 4 4 4 4 4 1 c c 4 4 1 4 4 c 
+    . c 4 4 4 4 4 1 4 4 f 4 1 f 4 f 
+    f 4 4 4 4 f 4 1 c 4 f 4 d f 4 f 
+    f 4 4 4 4 4 4 1 4 f f 4 f f 4 f 
+    . f 4 4 4 4 1 4 4 4 4 c b c f f 
+    . . f f f d 4 4 4 4 c d d c . . 
+    . . . . . f f f f f c c c . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.opgave3)
+tiles.placeOnTile(gåder3, tiles.getTileLocation(2, 11))
